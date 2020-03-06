@@ -61,6 +61,7 @@ _DEFAULT_CONFIG = {
 _LOGGER = logger.setup(__name__)
 """ Setup the access to the logging system of FogLAMP """
 
+_enviro = None
 
 def plugin_info():
     return {
@@ -74,24 +75,25 @@ def plugin_info():
 
 def plugin_init(config):
     data = copy.deepcopy(config)
+    global _enviro
+    _enviro = EnviroBoard() 
     return data
 
 def plugin_poll(handle):
     try:
-        enviro = EnviroBoard()
         time_stamp = str(datetime.now())
         readings = {}
         if handle['temperatureSensor']['value'] == 'true':
-            readings['temperature'] = enviro.temperature
+            readings['temperature'] = _enviro.temperature
 
         if handle['pressureSensor']['value'] == 'true':
-            readings['pressure'] = enviro.pressure
+            readings['pressure'] = _enviro.pressure
 
         if handle['humiditySensor']['value'] == 'true':
-            readings['humidity'] = enviro.humidity
+            readings['humidity'] = _enviro.humidity
 
         if handle['ambientLightSensor']['value'] == 'true':
-            readings['ambient_light'] = enviro.ambient_light
+            readings['ambient_light'] = _enviro.ambient_light
 
         wrapper = {
                 'asset':     'enviro',
