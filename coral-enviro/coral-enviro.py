@@ -6,6 +6,7 @@
 
 from datetime import datetime
 from coral.enviro.board import EnviroBoard
+import copy
 import uuid
 
 from foglamp.common import logger
@@ -26,6 +27,34 @@ _DEFAULT_CONFIG = {
         'description': 'The interval between poll calls to the device poll routine expressed in milliseconds.',
         'type': 'integer',
         'default': '10000'
+    },
+    'temperatureSensor': {
+        'description': 'Enable Temperature sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '3',
+        'displayName': 'Temperature Sensor'
+    },
+    'pressureSensor': {
+        'description': 'Enable Barometric Pressure sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '4',
+        'displayName': 'Pressure Sensor'
+    },
+    'humiditySensor': {
+        'description': 'Enable Humidity sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '5',
+        'displayName': 'Humidity Sensor'
+    },
+    'ambientLightSensor': {
+        'description': 'Enable Ambient Light sensor',
+        'type': 'boolean',
+        'default': 'true',
+        'order': '6',
+        'displayName': 'Ambient Light sensor'
     }
 }
 
@@ -44,18 +73,26 @@ def plugin_info():
     }
 
 def plugin_init(config):
-    return {} 
+    data = copy.deepcopy(config)
+    return data
 
 def plugin_poll(handle):
     try:
         enviro = EnviroBoard()
         time_stamp = str(datetime.now())
-        readings = {
-            'temperature': enviro.temperature,
-            'humidity': enviro.humidity,
-            'ambient_light': enviro.ambient_light,
-            'pressure': enviro.pressure
-        }
+        readings = {}
+        if handle['temperatureSensor']['value'] == 'true':
+            readings['temperature'] = enviro.temperature
+
+        if handle['pressureSensor']['value'] == 'true':
+            readings['pressure'] = enviro.pressure
+
+        if handle['humiditySensor']['value'] == 'true':
+            readings['humidity'] = enviro.humidity
+
+        if handle['ambientLightSensor']['value'] == 'true':
+            readings['ambient_light'] = enviro.ambient_light
+
         wrapper = {
                 'asset':     'enviro',
                 'timestamp': time_stamp,
@@ -69,7 +106,8 @@ def plugin_poll(handle):
     return None
 
 def plugin_reconfigure(handle, new_config):
-    return {}
+    new_handle = copy.deepcopy(new_config)
+    return new_handle
 
 def plugin_shutdown(handle):
     pass
