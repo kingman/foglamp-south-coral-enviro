@@ -54,7 +54,14 @@ _DEFAULT_CONFIG = {
         'type': 'boolean',
         'default': 'true',
         'order': '6',
-        'displayName': 'Ambient Light sensor'
+        'displayName': 'Ambient Light Sensor'
+    },
+    'groveAnalogSensor': {
+        'description': 'Enable Grove Analog sensor',
+        'type': 'boolean',
+        'default': 'false',
+        'order': '7',
+        'displayName': 'Grove Analog Sensor'
     }
 }
 
@@ -94,6 +101,9 @@ def plugin_poll(handle):
 
         if handle['ambientLightSensor']['value'] == 'true':
             readings['ambient_light'] = _enviro.ambient_light
+
+        if handle['groveAnalogSensor']['value'] == 'true':
+            readings['grove_analog'] = _enviro.grove_analog
 
         wrapper = {
                 'asset':     'enviro',
