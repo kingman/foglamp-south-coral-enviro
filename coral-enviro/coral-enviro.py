@@ -88,7 +88,7 @@ def plugin_init(config):
 
 def plugin_poll(handle):
     try:
-        time_stamp = str(datetime.now())
+        time_stamp = str(datetime.utcnow())
         readings = {}
         if handle['temperatureSensor']['value'] == 'true':
             readings['temperature'] = _enviro.temperature
