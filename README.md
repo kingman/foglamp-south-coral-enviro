@@ -11,4 +11,4 @@ Run following commands on Raspberry Pi:
 
     cd "$HOME"
     git clone https://github.com/kingman/foglamp-south-coral-enviro.git
-    sudo cp -R "$HOME"/foglamp-south-coral-enviro/coral-enviro /usr/local/foglamp/python/foglamp/plugins/south/
+    sudo cp -R "$HOME"/foglamp-south-coral-enviro/python/foglamp/plugins/south/coral-enviro /usr/local/foglamp/python/foglamp/plugins/south/
